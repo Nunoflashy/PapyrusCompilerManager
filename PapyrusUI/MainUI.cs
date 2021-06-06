@@ -16,7 +16,6 @@ using ModUtilsLib;
 using ModUtilsLib.Exception;
 using PapyrusLibrary.Compiler;
 using PapyrusLibrary.Script;
-using JsonConfig;
 
 namespace PapyrusUI
 {
@@ -140,17 +139,6 @@ namespace PapyrusUI
                 Console.WriteLine("Opened in editor");
             });
             scriptList.ContextMenu = cm;
-
-            LoadConfig();
-        }
-
-        private void LoadConfig() {
-            var compilerSettings = Config.Default.CompilerSettings;
-
-        }
-
-        private void SaveConfig() {
-
         }
 
         private void StartCompile()
@@ -251,11 +239,6 @@ namespace PapyrusUI
                 }
             }
 
-            
-
-            foreach (string item in projectList.Items) {
-                dependencyModList.Items.Add(item);
-            }
 
             LoadModPaths();
         }
@@ -339,10 +322,6 @@ namespace PapyrusUI
             
             //sideBar.Location = new Point(1, 1 + menuStripPanel.Height);
             sideBar.Size     = new Size(sideBar.Width, Height-20);
-
-            mainTabControl.Width = Width - 218 - (extendedTabControl1.Visible ? sideBarRight.Width : 0);
-            mainTabControl.Height = Height-50;
-
 
             if (WindowState == FormWindowState.Maximized) {
                 maximizeBtn.Image = Properties.Resources.restore;
@@ -429,23 +408,6 @@ namespace PapyrusUI
             this.WindowState = FormWindowState.Minimized;
         }
         #endregion Minimize Button
-        
-
-        private void AddAllBtn_Click(object sender, EventArgs e) {
-            // Get all mods from the list
-            string[] selectedMods = (from string mod in projectList.SelectedItems select mod).ToArray();
-            
-            // Iterate through all the selected mods and add them to the input path
-            foreach (string mod in selectedMods) {
-                string path = $"{localMoPath}\\{projectList.GetItemText(mod)}";
-                string modSource = $"{path}\\scripts\\source";
-                PapyrusCompiler.Arguments.AddPath(modSource);
-                // Show mod added
-                Console.WriteLine("Added Mod: " + modSource);
-            }
-            PapyrusCompiler.Arguments.AddPath($"{localMoPath}\\{projectList.GetItemText(projectList.SelectedItem)}\\scripts\\source");
-
-        }
 
         private void StartCompilation()
         {
@@ -666,13 +628,6 @@ namespace PapyrusUI
             }
         }
 
-        private void directCompileBtn_Click(object sender, EventArgs e)
-        {
-            PapyrusCompiler.DirectCompile(compilerArguments.Text);
-            ShowErrorOutput();
-            Console.WriteLine(PapyrusCompiler.StdOut);
-        }
-
         private void button2_Click(object sender, EventArgs e)
         {
             bool containsMod = modDependencyList.ContainsKey(SelectedMod.Name);
@@ -814,7 +769,7 @@ namespace PapyrusUI
                 sideBarRight.Visible = false;
             }
 
-            mainTabControl.Width = Width - 218 - (sideBarRight.Visible ? sideBarRight.Width : 0);
+            //mainTabControl.Width = Width - 218 - (sideBarRight.Visible ? sideBarRight.Width : 0);
         }
 
         private void ScriptList_SelectedIndexChanged(object sender, EventArgs e)
@@ -836,38 +791,9 @@ namespace PapyrusUI
             properties.Show();
         }
 
-        private void AddModDependencyBtn_Click(object sender, EventArgs e) {
-            // Get all mods from the list
-            string[] selectedMods = (from string mod in dependencyModList.SelectedItems select mod).ToArray();
 
-            // Iterate through all the selected mods and add them to the input path
-            foreach (string mod in selectedMods) {
-                string path = $"{localMoPath}\\{projectList.GetItemText(mod)}";
-                string modSource = $"{path}\\scripts\\source";
-                PapyrusCompiler.Arguments.AddPath(modSource);
-                // Show mod added
-                Console.WriteLine("Added Mod: " + modSource);
-                dependencyList.Items.Add(mod);
-
-            }
-            PapyrusCompiler.Arguments.AddPath($"{localMoPath}\\{projectList.GetItemText(projectList.SelectedItem)}\\scripts\\source");
-            
-        }
         [System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = true)]
         static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
-
-        private void Button2_Click_1(object sender, EventArgs e) {
-            OpenFileDialog ofd = new OpenFileDialog();
-            if(ofd.ShowDialog() == DialogResult.OK) {
-                Process p = Process.Start(ofd.FileName);
-                p.WaitForInputIdle();
-                while(p.MainWindowHandle == IntPtr.Zero) {
-                    Thread.Sleep(100);
-                    p.Refresh();
-                }
-                SetParent(p.MainWindowHandle, outputTab.Handle);
-            }
-        }
 
         private void BuildScriptMenuItem_Click(object sender, EventArgs e) {
             StartCompilation();
@@ -913,9 +839,9 @@ namespace PapyrusUI
 
         private void ScriptList_DoubleClick(object sender, EventArgs e) {
             string selectedScript = scriptList.GetItemText(scriptList.SelectedItem);
-            if(scriptList.SelectedItem != null && !mainTabControl.TabPages.ContainsKey(selectedScript)) {
-                mainTabControl.TabPages.Add(selectedScript);
-            }
+            //if(scriptList.SelectedItem != null && !mainTabControl.TabPages.ContainsKey(selectedScript)) {
+            //    mainTabControl.TabPages.Add(selectedScript);
+            //}
         }
 
         private void ErrorListTextbox_TextChanged(object sender, EventArgs e) {
@@ -949,26 +875,10 @@ namespace PapyrusUI
         private void BottomSplitter_SplitterMoved(object sender, SplitterEventArgs e) {
             const int padding = 20;
             sideBarRight.Size = new Size(sideBarRight.Width, Height - padding - (Height - bottomSplitter.Location.Y));
-            mainTabControl.Height = Height - padding - (Height - bottomSplitter.Location.Y);
+            //mainTabControl.Height = Height - padding - (Height - bottomSplitter.Location.Y);
             sideBar.Height = Height - padding - (Height - bottomSplitter.Location.Y);
             scriptsPanel.MaximumHeight = Height - padding - (Height - bottomSplitter.Location.Y);
         }
-
-        //private void FastColoredTextBox1_TextChanged(object sender, FastColoredTextBoxNS.TextChangedEventArgs e) {
-        //    string currentScript =
-        //        $"{localMoPath}\\{projectList.GetItemText(projectList.SelectedItem)}\\scripts\\source\\{scriptList.GetItemText(scriptList.SelectedItem)}";
-
-        //    try {
-        //        ScriptInfo loadedScript = new ScriptInfo(currentScript);
-        //        //fastColoredTextBox1.SaveToFile(currentScript, Encoding.UTF8);
-        //        loadedScript.RefreshScript();
-        //    }
-        //    catch (Exception) {
-
-        //    }
-
-        //    //linesOfCodeCount.Text = $"{fastColoredTextBox1.Lines.Count} LOC";
-        //}
 
         private void SaveToolStripMenuItem_Click(object sender, EventArgs e) {
             string currentScript =
