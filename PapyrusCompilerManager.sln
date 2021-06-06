@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29215.179
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PapyrusUI", "PapyrusUI\PapyrusUI.csproj", "{809DD22B-424C-4602-835C-1609367E8D36}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PapyrusLib", "PapyrusLibrary\PapyrusLib.csproj", "{7B6CA130-698A-4917-A8DC-1F7878E16BD2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModUtilsLib", "ModUtilsLib\ModUtilsLib.csproj", "{9135F1FC-0B8B-44CB-A1C2-68545A094DB4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{809DD22B-424C-4602-835C-1609367E8D36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{809DD22B-424C-4602-835C-1609367E8D36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{809DD22B-424C-4602-835C-1609367E8D36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{809DD22B-424C-4602-835C-1609367E8D36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B6CA130-698A-4917-A8DC-1F7878E16BD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B6CA130-698A-4917-A8DC-1F7878E16BD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B6CA130-698A-4917-A8DC-1F7878E16BD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B6CA130-698A-4917-A8DC-1F7878E16BD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9135F1FC-0B8B-44CB-A1C2-68545A094DB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9135F1FC-0B8B-44CB-A1C2-68545A094DB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9135F1FC-0B8B-44CB-A1C2-68545A094DB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9135F1FC-0B8B-44CB-A1C2-68545A094DB4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DE3AC916-91C3-4238-A8A6-E87FB897472C}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,343 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{809DD22B-424C-4602-835C-1609367E8D36}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>PapyrusUI</RootNamespace>
+    <AssemblyName>PapyrusUI</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="JsonConfig, Version=1.0.5359.16918, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\JsonConfig.1.0.0\lib\JsonConfig.dll</HintPath>
+    </Reference>
+    <Reference Include="JsonFx, Version=2.0.1209.2802, Culture=neutral, PublicKeyToken=315052dd637f8a52, processorArchitecture=MSIL">
+      <HintPath>..\packages\JsonFx.2.0.1209.2802\lib\net40\JsonFx.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.6.5\lib\net45\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="ScintillaNET, Version=3.6.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\jacobslusser.ScintillaNET.3.6.3\lib\net40\ScintillaNET.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AddScriptForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddScriptForm.Designer.cs">
+      <DependentUpon>AddScriptForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DarkListbox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\ExtendedLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\ExtendedListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DirectCompileUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DirectCompileUI.Designer.cs">
+      <DependentUpon>DirectCompileUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PropertiesUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PropertiesUI.Designer.cs">
+      <DependentUpon>PropertiesUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PapyrusEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UC\DisplayButton.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\DisplayButton.Designer.cs">
+      <DependentUpon>DisplayButton.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC\ExtendedTabControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\ExtendedTabControl.Designer.cs">
+      <DependentUpon>ExtendedTabControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ExtendedTextEntry.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UC\HeaderPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\HeaderPanel.Designer.cs">
+      <DependentUpon>HeaderPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC\HeaderPanelDesigner.cs" />
+    <Compile Include="MainUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainUI.Designer.cs">
+      <DependentUpon>MainUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewProjectUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewProjectUI.Designer.cs">
+      <DependentUpon>NewProjectUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PlaceholderTextbox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="UC\GlobalConfigurationPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\GlobalConfigurationPanel.Designer.cs">
+      <DependentUpon>GlobalConfigurationPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AddScriptForm.resx">
+      <DependentUpon>AddScriptForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DirectCompileUI.resx">
+      <DependentUpon>DirectCompileUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PropertiesUI.resx">
+      <DependentUpon>PropertiesUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC\DisplayButton.resx">
+      <DependentUpon>DisplayButton.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC\ExtendedTabControl.resx">
+      <DependentUpon>ExtendedTabControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC\HeaderPanel.resx">
+      <DependentUpon>HeaderPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainUI.resx">
+      <DependentUpon>MainUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewProjectUI.resx">
+      <DependentUpon>NewProjectUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC\GlobalConfigurationPanel.resx">
+      <DependentUpon>GlobalConfigurationPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\maximize.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\restore.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\minimize.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\close.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\minimize_enter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\restore_enter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\close_enter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\maximize_enter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ModUtilsLib\ModUtilsLib.csproj">
+      <Project>{9135f1fc-0b8b-44cb-a1c2-68545a094db4}</Project>
+      <Name>ModUtilsLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PapyrusLibrary\PapyrusLib.csproj">
+      <Project>{7b6ca130-698a-4917-a8dc-1f7878e16bd2}</Project>
+      <Name>PapyrusLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\error logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\error-icon-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\errorIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Error-512.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\infoIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\errorIcon1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\functionIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\functionIcon32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\functionIcon16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\eventIcon16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\resizeHandle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\functionIcon8x8.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\eventIcon8x8.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\eventIcon12x12.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\functionIcon12x12.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\eventIcon12x121.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\var12x12.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Foobar2000_logo_2014.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\var.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\var44x44.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\var44x441.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\var44x442.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\var44x443.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\var44x444.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\script32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\script16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\fragment16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\warningIcon.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
