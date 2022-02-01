@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.IO;
-using PapyrusLibrary.Compiler;
+using PapyrusLibrary.Decompiler;
+using Newtonsoft.Json;
 
-namespace PapyrusLibrary
-{
+namespace PapyrusLibrary.Compiler {
     /// <summary>
     /// Object representing the papyrus compiler and the necessary options to make it work.
     /// </summary>
@@ -41,7 +41,6 @@ namespace PapyrusLibrary
             papyrus.StartInfo.RedirectStandardOutput = RedirectStdOut;
             papyrus.StartInfo.RedirectStandardError  = RedirectStdErr;
             
-
             papyrus.EnableRaisingEvents = true;
 
             #region Output Streams
@@ -170,20 +169,6 @@ namespace PapyrusLibrary
             papyrus.Start();
             papyrus.WaitForExit();
         }
-
-        //public static CompilationStatus Compile(string[] scripts)
-        //{
-        //    if(scripts == null) {
-        //        throw new ArgumentNullException();
-        //    }
-
-        //    CompilationStatus result = CompilationStatus.Failed;
-
-        //    foreach(string script in scripts) {
-        //        result = Compile(script);
-        //    }
-        //    return result;
-        //}
 
         /// <summary>
         /// Allows the use of the compiler directly by passing in all arguments

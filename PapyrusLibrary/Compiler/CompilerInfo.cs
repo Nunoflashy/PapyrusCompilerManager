@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PapyrusLibrary
-{
+namespace PapyrusLibrary.Compiler {
     /* Standard error representation from Papyrus:
      * ScriptName(ErrorLine,Col): ErrorMessage
      * TempleBlessing.psc(4,32): mismatched input 'Property' expecting FUNCTION
@@ -23,6 +22,7 @@ namespace PapyrusLibrary
         public static string[] StdErr
         {
             get {
+                storedStdErr.Clear(); // Clear the previous StdErr output
                 /* Reads StdErr from the compiler and splits the errors into lines,
                  * this is the raw output and cannot be manipulated directly.*/
                 string[] output = PapyrusCompiler.StdErr.Split(Environment.NewLine.ToCharArray());
@@ -30,10 +30,11 @@ namespace PapyrusLibrary
                 /* Due to the nature of how the compiler generates StdErr,
                  * we have to check if it hasn't already been generated(if it has, it will be empty string),
                  * if not, then we assign it to a local list for easier string manip.*/
-                if (!string.IsNullOrWhiteSpace(output[0])) {
-                    storedStdErr = output.ToList();
+                for(int i = 0; i < output.Length; i++) {
+                    if (!string.IsNullOrWhiteSpace(output[i])) {
+                        storedStdErr.Add(output[i]);
+                    }
                 }
-
                 return storedStdErr.ToArray();
             }
         }

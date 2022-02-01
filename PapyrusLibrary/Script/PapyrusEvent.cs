@@ -25,7 +25,7 @@ namespace PapyrusLibrary.Script {
             }
             return events.ToArray();
         }
-
+        
         private static bool IsValidEvent(string eventLine) {
             try {
                 string fw = eventLine.Substring(0, eventLine.IndexOf(' ')+1);

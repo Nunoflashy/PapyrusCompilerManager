@@ -37,6 +37,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -48,7 +49,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject />
+    <StartupObject>PapyrusUI.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="JsonConfig, Version=1.0.5359.16918, Culture=neutral, processorArchitecture=MSIL">
@@ -89,6 +90,15 @@
     <Compile Include="AddScriptForm.Designer.cs">
       <DependentUpon>AddScriptForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConfigCompilerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigCompilerForm.Designer.cs">
+      <DependentUpon>ConfigCompilerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\BorderlessDynamicForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Controls\DarkListbox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -119,6 +129,12 @@
     <Compile Include="UC\DisplayButton.Designer.cs">
       <DependentUpon>DisplayButton.cs</DependentUpon>
     </Compile>
+    <Compile Include="UC\ErrorList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\ErrorList.Designer.cs">
+      <DependentUpon>ErrorList.cs</DependentUpon>
+    </Compile>
     <Compile Include="UC\ExtendedTabControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -127,6 +143,12 @@
     </Compile>
     <Compile Include="Controls\ExtendedTextEntry.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UC\FunctionList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\FunctionList.Designer.cs">
+      <DependentUpon>FunctionList.cs</DependentUpon>
     </Compile>
     <Compile Include="UC\HeaderPanel.cs">
       <SubType>UserControl</SubType>
@@ -141,12 +163,6 @@
     <Compile Include="MainUI.Designer.cs">
       <DependentUpon>MainUI.cs</DependentUpon>
     </Compile>
-    <Compile Include="NewProjectUI.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="NewProjectUI.Designer.cs">
-      <DependentUpon>NewProjectUI.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\PlaceholderTextbox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -158,8 +174,32 @@
       <DependentUpon>GlobalConfigurationPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UC\ImageLabel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\ImageLabel.Designer.cs">
+      <DependentUpon>ImageLabel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ScriptViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ScriptViewer.Designer.cs">
+      <DependentUpon>ScriptViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC\PropertyList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\PropertyList.Designer.cs">
+      <DependentUpon>PropertyList.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="AddScriptForm.resx">
       <DependentUpon>AddScriptForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigCompilerForm.resx">
+      <DependentUpon>ConfigCompilerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\BorderlessDynamicForm.resx">
+      <DependentUpon>BorderlessDynamicForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DirectCompileUI.resx">
       <DependentUpon>DirectCompileUI.cs</DependentUpon>
@@ -170,17 +210,20 @@
     <EmbeddedResource Include="UC\DisplayButton.resx">
       <DependentUpon>DisplayButton.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UC\ErrorList.resx">
+      <DependentUpon>ErrorList.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UC\ExtendedTabControl.resx">
       <DependentUpon>ExtendedTabControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC\FunctionList.resx">
+      <DependentUpon>FunctionList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UC\HeaderPanel.resx">
       <DependentUpon>HeaderPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainUI.resx">
       <DependentUpon>MainUI.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="NewProjectUI.resx">
-      <DependentUpon>NewProjectUI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UC\GlobalConfigurationPanel.resx">
       <DependentUpon>GlobalConfigurationPanel.cs</DependentUpon>
@@ -195,6 +238,15 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="UC\ImageLabel.resx">
+      <DependentUpon>ImageLabel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ScriptViewer.resx">
+      <DependentUpon>ScriptViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC\PropertyList.resx">
+      <DependentUpon>PropertyList.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -338,6 +390,45 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\warningIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\eventIcon_grayscale.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\decompile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrow-left.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrow-right.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\play16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\play16x161.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\decompile16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\switchDecompile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\switchBuild.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Mod_Organizer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\browseDirectoryIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\browseDirectoryIcon2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

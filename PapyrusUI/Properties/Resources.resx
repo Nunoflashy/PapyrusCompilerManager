@@ -121,11 +121,17 @@
   <data name="maximize" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\maximize.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="functionIcon12x12" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\functionIcon12x12.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="restore" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\restore.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="eventIcon12x121" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\eventIcon12x121.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="var" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\var.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="functionIcon32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\functionIcon32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -145,32 +151,41 @@
   <data name="functionIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\functionIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="switchBuild" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\switchBuild.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="errorIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\errorIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="script32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\script32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="switchDecompile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\switchDecompile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="restore_enter" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\restore_enter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="decompile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\decompile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="eventIcon16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\eventIcon16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="minimize_enter" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\minimize_enter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="script32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\script32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Foobar2000_logo_2014" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Foobar2000_logo_2014.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="warningIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\warningIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="eventIcon12x12" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\eventIcon12x12.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="functionIcon16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\functionIcon16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="browseDirectoryIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\browseDirectoryIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="script16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\script16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="play" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\play.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Error-512" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Error-512.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -178,8 +193,8 @@
   <data name="var12x12" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\var12x12.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="functionIcon12x12" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\functionIcon12x12.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Foobar2000_logo_2014" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Foobar2000_logo_2014.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="var44x44" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\var44x44.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -190,6 +205,12 @@
   <data name="close_enter" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\close_enter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="arrow-left" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\arrow-left.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="arrow-right" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\arrow-right.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="resizeHandle" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\resizeHandle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -199,14 +220,26 @@
   <data name="close" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\close.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="var" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\var.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="eventIcon_grayscale" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\eventIcon_grayscale.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="functionIcon16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\functionIcon16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="minimize_enter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\minimize_enter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="decompile16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\decompile16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="infoIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\infoIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="functionIcon8x8" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\functionIcon8x8.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="play16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\play16x161.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="var44x442" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\var44x442.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -217,7 +250,10 @@
   <data name="var44x441" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\var44x441.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="warningIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\warningIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Mod_Organizer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Mod_Organizer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="browseDirectoryIcon2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\browseDirectoryIcon2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

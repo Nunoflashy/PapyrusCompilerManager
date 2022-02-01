@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Newtonsoft.Json;
 
 namespace PapyrusLibrary
 {
@@ -63,10 +64,12 @@ namespace PapyrusLibrary
         /// </summary>
         private string scriptToCompile { get { return $@"{mostRecentPath}\{Script}"; } }
 
+        public string ModPath = null;
+
         private string ScriptToCompile {
             get {
                 if(Script == null) return null;
-                return Path.Combine(mostRecentPath, Script);
+                return Path.Combine(ModPath, Script);
             }
         }
 
@@ -82,7 +85,9 @@ namespace PapyrusLibrary
              string[] allPaths = InputPath.Split(';');
 
             for(int i = 0; i < allPaths.Length; i++) {
-                System.Console.WriteLine($"Path {i}: {allPaths[i]}");
+#if DEBUG
+                //System.Console.WriteLine($"Path {i}: {allPaths[i]}");
+#endif
 
                 //If the path already exists, return, we don't want duplicates.
                 if(path == allPaths[i])
@@ -120,8 +125,8 @@ namespace PapyrusLibrary
                             $"{(KeepAssembly ?   "-keepasm" : "")}" +
                             $"{(AssemblyOnly ?   "-asmonly" : "")}";
 #if DEBUG
-            System.Reflection.MethodBase method = System.Reflection.MethodBase.GetCurrentMethod();
-            System.Console.WriteLine($"{method.ReflectedType.Name}.{method.Name}() -> {output}");
+            //System.Reflection.MethodBase method = System.Reflection.MethodBase.GetCurrentMethod();
+            //System.Console.WriteLine($"{method.ReflectedType.Name}.{method.Name}() -> {output}");
 #endif
             return output;
         }
@@ -132,5 +137,13 @@ namespace PapyrusLibrary
         /// <returns></returns>
         public bool IsValid() => !(string.IsNullOrEmpty(FlagPath)  && string.IsNullOrEmpty(OutputPath) &&
                                    string.IsNullOrEmpty(InputPath) && string.IsNullOrEmpty(Script));
+
+        public string Serialize() {
+            return JsonConvert.SerializeObject(this, Formatting.Indented);
+        }
+
+        public static PapyrusArgumentHandler Deserialize(string serialized) {
+            return JsonConvert.DeserializeObject<PapyrusArgumentHandler>(serialized);
+        }
     }
 }

@@ -14,8 +14,11 @@ using System.IO;
 using NLog;
 using ModUtilsLib;
 using ModUtilsLib.Exception;
-using PapyrusLibrary.Compiler;
+using PapyrusLibrary.Decompiler;
 using PapyrusLibrary.Script;
+using PapyrusLibrary.Compiler;
+using System.Reflection;
+using System.Linq.Expressions;
 
 namespace PapyrusUI
 {
@@ -24,11 +27,12 @@ namespace PapyrusUI
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         private PropertiesUI properties = new PropertiesUI();
+
+        private enum ActionMode { Compilation, Decompilation };
+
+        private ActionMode action = ActionMode.Compilation;
         
         ContextMenu cm = new ContextMenu();
-
-        private ModInfo ActiveMod = null;
-        private ScriptInfo SelectedScript = null;
         
         private static void InitializeNLog()
         {
@@ -68,7 +72,8 @@ namespace PapyrusUI
                     if ((int)m.Result == HTCLIENT)
                     {
                         Point screenPoint = new Point(m.LParam.ToInt32());
-                        Point clientPoint = this.PointToClient(screenPoint);                        
+                        Point clientPoint = this.PointToClient(screenPoint);  
+                        
                         if (clientPoint.Y <= RESIZE_HANDLE_SIZE)
                         {
                             if (clientPoint.X <= RESIZE_HANDLE_SIZE)
@@ -114,8 +119,12 @@ namespace PapyrusUI
         #endregion
 
         bool maximized = false;
+        bool canBeMaximized = true;
         private void MaximizeAndRestore()
         {
+            if(!canBeMaximized)
+                return;
+
             Console.WriteLine("Maximized");
             this.WindowState = maximized ? FormWindowState.Normal : FormWindowState.Maximized;
             maximized = !maximized;
@@ -139,91 +148,50 @@ namespace PapyrusUI
                 Console.WriteLine("Opened in editor");
             });
             scriptList.ContextMenu = cm;
-        }
 
-        private void StartCompile()
-        {
-            //papyrus.StartInfo.Arguments = @"c:\Program Files (x86)\Steam\steamapps\common\Skyrim\Data\scripts\Source\mzin_sslb_lockedalias.psc" +
-            //                  @"-f=C:\Program Files(x86)\Steam\steamapps\common\Skyrim\Data\scripts\Source\TESV_Papyrus_Flags.flg" +
-            //                  @"-i=C:\Program Files (x86)\Steam\steamapps\common\Skyrim\Data\Scripts\Source" +
-            //                  @"-o=C:\Program Files(x86)\Steam\steamapps\common\Skyrim\Data\Scripts -op";
-        }
-
-        private void SetupScintilla() {
-            //scintilla1.Text = "";
-            //scintilla1.Margins[0].Width = 10;
-            //scintilla1.Styles[ScintillaNET.Style.Default].BackColor = Color.FromArgb(30, 30, 30);
-            //scintilla1.Styles[ScintillaNET.Style.Cpp.GlobalClass].BackColor = Color.FromArgb(30, 30, 30);
-            //scintilla1.Lexer = ScintillaNET.Lexer.Cpp;
-            //scintilla1.Styles[ScintillaNET.Style.Cpp.String].Font = "Consolas";
-            //scintilla1.Styles[ScintillaNET.Style.Cpp.String].Size = 14;
-            //scintilla1.Styles[ScintillaNET.Style.Cpp.String].BackColor = Color.FromArgb(30, 30, 30);
-            //scintilla1.Styles[ScintillaNET.Style.Cpp.String].ForeColor = Color.White;
-            //scintilla1.SetKeywords(0, "event function bool int while");
-            //scintilla1.SetKeywords(1, "GlobalVariable Property Auto ReadOnly AutoReadOnly");
-            //scintilla1.Styles[ScintillaNET.Style.Cpp.Word].BackColor = Color.FromArgb(30, 30, 30);
-            //scintilla1.Styles[ScintillaNET.Style.Cpp.Word].ForeColor = Color.DodgerBlue;
-            //scintilla1.Styles[ScintillaNET.Style.Cpp.Word2].BackColor = Color.FromArgb(30, 30, 30);
-            //scintilla1.Styles[ScintillaNET.Style.Cpp.Word2].ForeColor = Color.Coral;
-            //scintilla1.Styles[ScintillaNET.Style.LineNumber].BackColor = Color.FromArgb(30, 30, 30);
-            //scintilla1.Styles[ScintillaNET.Style.LineNumber].ForeColor = Color.White;
-            //Console.WriteLine(scintilla1.DescribeKeywordSets());
-        }
-
-        private void SetPapyrusConfig() {
-            globalConfigForm.CompilerPath = $@"{Application.StartupPath}\Papyrus Compiler\PapyrusCompiler.exe";
-            globalConfigForm.InputScriptsPath = $@"{Application.StartupPath}\scripts\source";
-            globalConfigForm.CompilerFlagPath = $@"{globalConfigForm.InputScriptsPath}\TESV_Papyrus_Flags.flg";
-            globalConfigForm.OutputScriptsPath = $@"{Application.StartupPath}\output";
+            this.Width = 600;
         }
         
         private void MainUI_Load(object sender, EventArgs e)
         {
-            // SetupScintilla();
-            SetPapyrusConfig();
-
-            PapyrusCompiler.Path = globalConfigForm.CompilerPath;
-            PapyrusCompiler.Arguments = new PapyrusArgumentHandler() {
-                FlagPath    = globalConfigForm.CompilerFlagPath,
-                InputPath   = globalConfigForm.InputScriptsPath,
-                OutputPath  = globalConfigForm.OutputScriptsPath,
-                Script      = scriptList.GetItemText(scriptList.SelectedItem),
-                Optimize    = true
-            };
-
-            Console.WriteLine(PapyrusCompiler.Path);
-            Console.WriteLine(PapyrusCompiler.Arguments.FlagPath);
-            Console.WriteLine(PapyrusCompiler.Arguments.InputPath);
-            Console.WriteLine(PapyrusCompiler.Arguments.OutputPath);
-            Console.WriteLine(PapyrusCompiler.Arguments.Script);
-
-            //SetScriptsToLoad();
-
-            string[] dirs = Directory.GetDirectories(localMoPath);
 
 
+            //PapyrusDecompilerConfig.Load();
+
+            //PapyrusDecompiler.Path = PapyrusDecompilerConfig.Path;
+            //PapyrusDecompiler.Arguments = PapyrusDecompilerConfig.Arguments;
+
+            ////PapyrusDecompilerConfig.Save();
+
+            //Console.WriteLine($"PapyrusDecompiler.Path: {PapyrusDecompiler.Path}");
+            //Console.WriteLine($"PapyrusDecompiler.Arguments: {PapyrusDecompiler.Arguments.InputPath}");
+
+
+            //PapyrusArgumentHandler args = PapyrusCompiler.Arguments.Deserialize();
+            //Console.WriteLine(args.FlagPath);
+
+            LoadModPaths();
             LoadModList();
 
+            SetupCompiler();
+            PapyrusCompilerConfig.Save();
+
             projectsPanel.MinimumHeight = 15;
-            //projectsPanel.MaximumHeight = 280;
             projectsPanel.MaximumHeight = (int)(13.3 * projectList.Items.Count);
 
             scriptsPanel.MinimumHeight = 15;
             scriptsPanel.MaximumHeight = Height - projectsPanel.Height;
 
-            //sideBarRight.Size = new Size(sideBarRight.Width, Height-40);
             mainContainer.Location = new Point(2, menuStripPanel.Height);
 
-            headerPanel1.MinimumHeight = 15;
-            headerPanel1.MaximumHeight = 400;
+            scriptInfoPanel.MinimumHeight = 15;
+            scriptInfoPanel.MaximumHeight = 400;
 
             modsInstalledCount.Text = $"{projectList.Items.Count} Mods Installed";
             scriptsFromModCount.Text = $"{scriptList.Items.Count} Scripts";
 
-            headerPanel1.AnimationSpeed = 8;
-
         }
-
+        
         private string modOrganizerModsPath = @"C:\Program Files (x86)\Steam\steamapps\common\Skyrim\ModOrganizer2\mods\";
         private string localMoPath          = $@"{Application.StartupPath}\MO\mods";
 
@@ -246,6 +214,27 @@ namespace PapyrusUI
         private ModInfo SelectedMod =>
             new ModInfo(Path.Combine(localMoPath, projectList.GetItemText(projectList.SelectedItem)));
 
+        private ScriptInfo SelectedScript =>
+            new ScriptInfo($"{localMoPath}\\{SelectedMod.Name}\\{(action == ActionMode.Compilation ? "scripts\\source" : "scripts")}\\{scriptList.GetItemText(scriptList.SelectedItem)}");
+
+        private void LoadCompiledScriptsList() {
+            scriptList.Items.Clear();
+
+            try {
+                ScriptInfo[] scripts = SelectedMod.Scripts;
+                Console.WriteLine($"Has Scripts - {(SelectedMod.HasScripts ? "Yes" : "No")}: {scripts.Length}");
+                foreach(ScriptInfo script in scripts) {
+                    scriptList.Items.Add(script.Name);
+                }
+            }
+            catch (DirectoryNotFoundException) {
+                logger.Info($"{SelectedMod.Name} -> Mod does not contain a scripts directory.");
+                errorList.AddError($"Info: {SelectedMod.Name} -> Mod does not contain a scripts directory.");
+            }
+
+            scriptsFromModCount.Text = $"{scriptList.Items.Count} Scripts";
+        }
+
         private void LoadScriptList()
         {
             scriptList.Items.Clear();
@@ -253,45 +242,21 @@ namespace PapyrusUI
             // Gets the current mod from the list
             string selectedMod = projectList.GetItemText(projectList.SelectedItem);
             ModInfo mod = new ModInfo(Path.Combine(localMoPath, selectedMod));
-            ActiveMod = mod;
+            
             try {
                 ScriptInfo[] sources = SelectedMod.SourceScripts;
                 Console.WriteLine($"Has Scripts - {(SelectedMod.HasSourceScripts ? "Yes" : "No")}: {sources.Length}");
 
-                for(int i = 0; i < sources.Length; i++) {
-                    ScriptInfo script = sources[i];
-                    Console.WriteLine(script.Name + (script.Inherits ? (" extends" + script.Extends) : null));
-                    scriptList.Items.Add(script.Name);
+                foreach(ScriptInfo source in sources) {
+                    Console.WriteLine(source.Name + (source.Inherits ? (" extends" + source.Extends) : null));
+                    scriptList.Items.Add(source.Name);
                 }
-
-                //foreach (ScriptInfo script in sources) {
-                //    Console.WriteLine(script.Name + (script.Inherits ? (" <----"  + SelectedMod.SourceScripts[0].Extends) : null));
-                //    scriptList.Items.Add(script.Name);
-                //}
             }
             catch (DirectoryNotFoundException) {
                 logger.Info($"{SelectedMod.Name} -> Mod does not contain a source scripts directory.");
-                errorList.Items.Add($"Info: {SelectedMod.Name} -> Mod does not contain a source scripts directory.");
+                errorList.AddError($"Info: {SelectedMod.Name} -> Mod does not contain a source scripts directory.");
             }
-            //string modPath = $@"C:\Program Files (x86)\Steam\steamapps\common\Skyrim\ModOrganizer2\mods\Death Alternative - Captured\scripts\source";
 
-            //Console.WriteLine($"Papyrus Input Path: {PapyrusCompiler.Arguments.InputPath}");
-
-            ////PapyrusCompiler.Arguments.InputPath = $"{scriptsSourceDir.FullName}";
-
-            //if(scriptsSourceDir.Exists) {
-
-            //    FileInfo[] sourceScripts = scriptsSourceDir.GetFiles();
-
-            //    if(sourceScripts != null) {
-            //        Console.WriteLine("Mod has scripts");
-
-            //        foreach(FileInfo script in sourceScripts) {
-            //            scriptList.Items.Add(script.Name);
-            //        }
-            //    }
-
-            //}
             scriptsFromModCount.Text = $"{scriptList.Items.Count} Scripts";
         }
 
@@ -308,15 +273,9 @@ namespace PapyrusUI
                     TextRenderer.DrawText(gfx, Text, new Font("Verdana", 7), new Point(this.Width / 2 - (this.Text.Length / 2 + 24), 5), MainForeColor);
                 }
             }
-            //scriptsPanel.MaximumHeight = Height-projectsPanel.Height-150;
-            //scriptsPanel.MaximumHeight = Height - projectsPanel.Height;
-            Console.WriteLine("Scripts Panel Height: " + scriptsPanel.Height);
         }
 
         private void MainUI_SizeChanged(object sender, EventArgs e) {
-            // Force painting on resize
-            MainUI_Paint(null, null);
-
             const int padding = 1; // To get the buttons closer to the edge of the window
             actionButtonsPanel.Location = new Point(this.Width - actionButtonsPanel.Width-1, 1);
             
@@ -336,11 +295,17 @@ namespace PapyrusUI
             }
             scriptsPanel.Height = Height - projectsPanel.Height - 20 - errorList.Height;
 
+            if(!sideBarRight.Visible) {
+                sideBar.Width = this.Width;
+            }
 
+            UpdateControlLocation(modsInstalledCount);
+            UpdateControlLocation(scriptsFromModCount);
         }
 
         private void MainUI_KeyDown(object sender, KeyEventArgs e)
         {
+
         }
 
         #region Close Button
@@ -409,94 +374,167 @@ namespace PapyrusUI
         }
         #endregion Minimize Button
 
-        private void StartCompilation()
-        {
-            textBox1.Text = "";
-            //PapyrusCompiler.Compile(scriptList.GetItemText(scriptList.SelectedItem));
-            //PapyrusCompiler.Arguments.InputPath = globalConfigForm.InputScriptsPath;
-            //PapyrusCompiler.Arguments.InputPath += $@";{Application.StartupPath}\scripts\combat";
-            //PapyrusCompiler.Arguments.AddPath($@"{Application.StartupPath}\scripts\combat");
-            //PapyrusCompiler.Arguments.AddPath($@"{localMoPath}\{projectList.GetItemText(projectList.SelectedItem)}\scripts\source");
-            DirectoryInfo modPath = new DirectoryInfo($"{localMoPath}\\{projectList.GetItemText(projectList.SelectedItem)}\\scripts\\source");
-            
-            // Add the mod's dependencies from the list to the compiler's input path
-            //foreach (string dependency in dependsOnList.Items) {
-            //    PapyrusCompiler.Arguments.AddPath(dependency);
-            //}
-            PapyrusCompiler.Arguments.AddPath($"{localMoPath}\\{projectList.GetItemText(projectList.SelectedItem)}\\scripts\\source");
-            
-            string selectedMod = projectList.GetItemText(projectList.SelectedItem);
-
-            string[] selectedScripts = (from string script in scriptList.SelectedItems select script).ToArray();
-
-            //List<string> selectedScripts = new List<string>();
-            //foreach(ListViewItem lvi in scriptListView.SelectedItems) {
-            //    selectedScripts.Add(lvi.Text);
-            //}
-            
-            //ScriptInfo[] SelectedScripts = null;
-            //foreach(ScriptInfo script in SelectedScripts) {
-            //    new Thread(() => {
-
-            //    });
-            //}
-
-            new Thread(() => {
-                foreach (string script in selectedScripts) {
-                    PapyrusCompiler.Arguments.OutputPath = $@"{Application.StartupPath}\output\{selectedMod}\scripts";
-
-                    PapyrusCompiler.Compile(script);
-
-                    if(PapyrusCompiler.CompiledSuccessfully()) {
-                        statusBarLabel.Text = "Build Successful";
-                        textBox1.Text = PapyrusCompiler.StdOut;
-                    } else {
-                        statusBarLabel.Text = "Build Failed";
-                        textBox1.Text = PapyrusCompiler.StdErr;
-                    }
-
-                    //if (PapyrusCompiler.CompiledSuccessfully()) {
-                    //    string stdOutNoPath = PapyrusCompiler.StdOut.Substring
-                    //    (0, PapyrusCompiler.StdOut.IndexOf(projectList.GetItemText(projectList.SelectedItem)));
-                    //    textBox1.Text += stdOutNoPath;
-                    //}
-                    /*else*/
-                    //{
-                    //    var result = PapyrusCompiler.StdErr.Split(new[] { '\n' });
-                    //    int index = 0;
-                    //    foreach (string line in result) {
-                    //        try {
-                    //            if (line != string.Empty && line != " ") {
-                    //                Console.WriteLine($"{line.Substring(line.LastIndexOf("\\") + 1)}");
-                    //                string currentMod = projectList.GetItemText(projectList.SelectedItem);
-                    //                textBox1.Text = PapyrusCompiler.StdOut;
-                    //                string itemToAdd = $"{line.Substring(line.LastIndexOf("\\") + 1)}";
-                    //                string errorMessage = $"{itemToAdd.Substring(itemToAdd.IndexOf(':') + 2)}";
-                    //                Console.WriteLine(errorMessage);
-                    //                if (itemToAdd.Contains("unable to locate script")) {
-                    //                    itemToAdd += " (missing dependency)";
-                    //                }
-
-                    //                errorList.Items.Add(itemToAdd);
-                    //                errorCountLabel.Text = $"{errorList.Items.Count.ToString()} Errors";
-                    //                statusBarLabel.Text = "Build Failed";
-                    //            }
-                    //        }
-                    //        catch (Exception ex) {
-                    //            Console.WriteLine(ex.Message);
-                    //            logger.Error(ex);
-                    //        }
-
-                    //    }
-                    //    //textBox1.Text = PapyrusCompiler.StdErr;
-                    //}
-                    //ShowErrorOutput();
-                }
-            }).Start();
-
-
-            //outputTextBox.ForeColor = Color.Red;
+        private void SetupCompiler() {
+            PapyrusCompilerConfig.Load();
+            PapyrusCompiler.Path = PapyrusCompilerConfig.Path;
+            PapyrusCompiler.Arguments = PapyrusCompilerConfig.Arguments;
         }
+
+        private void SetupDecompiler() {
+            PapyrusDecompilerConfig.Load();
+            PapyrusDecompiler.Path = PapyrusDecompilerConfig.Path;
+            PapyrusDecompiler.Arguments = PapyrusDecompilerConfig.Arguments;
+        }
+
+        private void StartDecompilation() {
+            SetupDecompiler();
+            Console.WriteLine(PapyrusDecompilerConfig.Arguments);
+
+            //PapyrusDecompilerConfig.Save();
+            
+            PapyrusDecompiler.OnDecompiled += (stdout) => {
+                Console.WriteLine(stdout);
+                statusBarLabel.Text = stdout != null ? "Decompiled Successfully" : "Decompilation Failed";
+            };
+            PapyrusDecompiler.Decompile(SelectedScript);
+        }
+
+        private string _stdout = null;
+        private string _stderr = null;
+        private void CompileScript() {
+            string selectedMod = SelectedMod.Name;
+            string selectedScript = SelectedScript.Name;
+
+            PapyrusCompiler.Arguments.OutputPath = $@"{Application.StartupPath}\output\{selectedMod}\scripts";
+            PapyrusCompiler.Arguments.ModPath = $@"{Application.StartupPath}\output\{selectedMod}\scripts\source";
+            PapyrusCompiler.Compile(selectedScript);
+
+            _stdout = PapyrusCompiler.StdOut;
+            _stderr = PapyrusCompiler.StdErr;
+
+            Console.WriteLine($"StdOut: {_stdout}");
+            Console.WriteLine($"StdErr: {_stderr}");
+
+        }
+
+
+
+        private void StartCompilation() {
+            textBox1.Text = "";
+            errorList.Clear();
+            CompileScript();
+
+            if (PapyrusCompiler.CompiledSuccessfully()) {
+                statusBarLabel.Text = "Build Successful";
+                //textBox1.Text = _stdout;
+
+                //string stdOutNoPath = PapyrusCompiler.StdOut.Substring
+                //(0, PapyrusCompiler.StdOut.IndexOf(projectList.GetItemText(projectList.SelectedItem)));
+                //textBox1.Text += stdOutNoPath;
+
+            }
+            else {
+                statusBarLabel.Text = "Build Failed";
+
+                var result = CompilerInfo.StdErr;
+                for(int i = 0; i < result.Length; i++) {
+                    string msg      = StdErrFormatter.GetMessageAtIndex(i);
+                    ScriptInfo script   = StdErrFormatter.GetScriptAtIndex(i);
+                    int line        = StdErrFormatter.GetLineAtIndex(i);
+                    int col         = StdErrFormatter.GetColumnAtIndex(i);
+                    Console.WriteLine($"{msg}: {script} [{line}, {col}]");
+                    //errorList.AddError($"{msg}: {script} [{line}, {col}]");
+                    errorList.AddError(msg, SelectedMod, script, line, col);
+                }
+                textBox1.Text = PapyrusCompiler.StdErr;
+            }
+
+            //Console.WriteLine(PapyrusCompiler.Arguments.Parse());
+            Console.WriteLine(PapyrusCompiler.StdErr);
+
+            errorListTabs.Visible = true;
+        }
+
+        //private void StartCompilation()
+        //{
+        //    textBox1.Text = "";
+        //    //PapyrusCompiler.Arguments.AddPath("source");
+        //    //PapyrusCompiler.Arguments.AddPath($"{localMoPath}\\{projectList.GetItemText(projectList.SelectedItem)}\\scripts\\source");
+        //    //Console.WriteLine(PapyrusCompiler.Arguments.Serialize());
+        //    string selectedMod = projectList.GetItemText(projectList.SelectedItem);
+
+        //    string[] selectedScripts = (from string script in scriptList.SelectedItems select script).ToArray();
+
+        //    //List<string> selectedScripts = new List<string>();
+        //    //foreach(ListViewItem lvi in scriptListView.SelectedItems) {
+        //    //    selectedScripts.Add(lvi.Text);
+        //    //}
+            
+        //    //ScriptInfo[] SelectedScripts = null;
+        //    //foreach(ScriptInfo script in SelectedScripts) {
+        //    //    new Thread(() => {
+
+        //    //    });
+        //    //}
+
+        //    new Thread(() => {
+        //        foreach (string script in selectedScripts) {
+        //            PapyrusCompiler.Arguments.OutputPath = $@"{Application.StartupPath}\output\{selectedMod}\scripts";
+
+        //            PapyrusCompiler.Compile(script);
+
+        //            if(PapyrusCompiler.CompiledSuccessfully()) {
+        //                statusBarLabel.Text = "Build Successful";
+        //                textBox1.Text = PapyrusCompiler.StdOut;
+        //            } else {
+        //                statusBarLabel.Text = "Build Failed";
+        //                textBox1.Text = PapyrusCompiler.StdErr;
+        //            }
+
+        //            if (PapyrusCompiler.CompiledSuccessfully()) {
+        //                string stdOutNoPath = PapyrusCompiler.StdOut.Substring
+        //                (0, PapyrusCompiler.StdOut.IndexOf(projectList.GetItemText(projectList.SelectedItem)));
+        //                textBox1.Text += stdOutNoPath;
+        //            }
+        //            /*else*/
+        //            {
+        //                var result = PapyrusCompiler.StdErr.Split(new[] { '\n' });
+        //                int index = 0;
+        //                foreach (string line in result) {
+        //                    try {
+        //                        if (line != string.Empty && line != " " && line != "\n") {
+        //                            Console.WriteLine($"{line.Substring(line.LastIndexOf("\\") + 1)}");
+        //                            string currentMod = projectList.GetItemText(projectList.SelectedItem);
+        //                            textBox1.Text = PapyrusCompiler.StdOut;
+        //                            string itemToAdd = $"{line.Substring(line.LastIndexOf("\\") + 1)}";
+        //                            string errorMessage = $"{itemToAdd.Substring(itemToAdd.IndexOf(':') + 2)}";
+        //                            textBox1.Text = errorMessage;
+        //                            Console.WriteLine(errorMessage);
+        //                            //if (itemToAdd.Contains("unable to locate script")) {
+        //                            //    itemToAdd += " (missing dependency)";
+        //                            //}
+        //                            errorList.AddError(itemToAdd);
+        //                            //errorList.Items.Add(itemToAdd);
+        //                            //errorCountLabel.Text = $"{errorList.Items.Count.ToString()} Errors";
+        //                            statusBarLabel.Text = "Build Failed";
+        //                        }
+        //                    }
+        //                    catch (Exception ex) {
+        //                        Console.WriteLine(ex.Message);
+        //                        logger.Error(ex);
+        //                    }
+
+        //                }
+        //                //textBox1.Text = PapyrusCompiler.StdErr;
+        //            }
+        //            ShowErrorOutput();
+        //        }
+        //    }).Start();
+
+        //    errorListTabs.Visible = true;
+
+        //    //outputTextBox.ForeColor = Color.Red;
+        //}
 
         private void ShowErrorOutput()
         {
@@ -509,7 +547,6 @@ namespace PapyrusUI
 
             foreach (string line in CompilerInfo.StdErr) {
                 Console.WriteLine(line);
-                //logger.Error(line);
             }
         }
 
@@ -538,11 +575,6 @@ namespace PapyrusUI
             Console.WriteLine("Mouse enter");
         }
 
-        private void listView1_ItemActivate(object sender, EventArgs e)
-        {
-            Console.WriteLine("item activated");
-        }
-
         private void MainUI_KeyUp(object sender, KeyEventArgs e)
         {
             if(e.KeyCode == Keys.Return) {
@@ -551,256 +583,148 @@ namespace PapyrusUI
             }
         }
 
-        /// <summary>
-        /// Retrieves all the mods currently in this path.
-        /// </summary>
-        /// <param name="moPath">The path to mod organizer's mod directory.</param>
-        /// <exception cref="DirectoryNotFoundException"></exception>
-        /// <returns></returns>
-        //private FileInfo[] GetMods(string moPath)
-        //{
-        //    //Get the base directory of where all mods reside
-        //    DirectoryInfo modsPath = new DirectoryInfo(moPath);
-
-        //    //Get the mods' folders themselves
-        //    FileInfo[] mods = modsPath.GetFiles();
-
-        //    if(mods == null) {
-        //        throw new DirectoryNotFoundException();
-        //    }
-
-        //    return mods;
-        //}
-
-        /// <summary>
-        /// Retrieves all the mods currently in this path.
-        /// </summary>
-        /// <param name="moPath">The path to mod organizer's mod directory.</param>
-        /// <exception cref="DirectoryNotFoundException"></exception>
-        /// <returns></returns>
-        private DirectoryInfo[] GetModDirectories(string moPath)
-        {
-            //Get the base directory of where all mods reside
-            DirectoryInfo modsPath = new DirectoryInfo(moPath);
-            DirectoryInfo[] mods = modsPath.GetDirectories();
-            return mods;
-        }
-
-        private DirectoryInfo[] GetModData(string path) {
-            DirectoryInfo modData = new DirectoryInfo(path);
-            DirectoryInfo[] subFolders = modData.GetDirectories();
-            return subFolders;
-        }
-        
-
-        private void addPathBtn_Click(object sender, EventArgs e)
-        {
-            //if(!importScriptsListBox.Items.Contains(globalConfigForm.InputScriptsPath))
-            //    importScriptsListBox.Items.Add(globalConfigForm.InputScriptsPath);
-
-            //if(importScriptsTextBox.Text != string.Empty && Directory.Exists(importScriptsTextBox.Text))
-            //    importScriptsListBox.Items.Add(importScriptsTextBox.Text);
-            
-        }
-
         private Dictionary<string, List<string>> modDependencyList = new Dictionary<string, List<string>>();
 
         private void projectList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //dependsOnList.Items.Clear();
+            sideBarRight.Visible = false;
+            decompileScriptPanel.Visible = false;
+            buildScriptPanel.Visible = false;
 
-            try {
-                //dependsOnList.Items.Add(modDependencyList[SelectedMod.Name]);
-                foreach(string path in modDependencyList[SelectedMod.Name]) {
-                    //dependsOnList.Items.Add(path);
-                    
-                }
-                Console.WriteLine(projectList.GetItemText(projectList.SelectedItem));
-            }
-            catch (KeyNotFoundException ex) {
-                Console.WriteLine(ex.Message);
+            //this.Width = sideBar.Width;
+            sideBar.Width = this.Width;
+            this.canBeMaximized = false;
+
+            if (this.WindowState == FormWindowState.Maximized) {
+                this.WindowState = FormWindowState.Normal;
             }
 
-            LoadScriptList();
+            Console.WriteLine(projectList.GetItemText(projectList.SelectedItem));
 
-            if(scriptsPanel.Height == scriptsPanel.MinimumHeight) {
+            statusBarLabel.Text = "No Script Selected";
+
+            swapToDecompileImage.Visible = SelectedMod.HasScripts;
+            swapToBuildImage.Visible = SelectedMod.HasSourceScripts;
+
+            if (action == ActionMode.Compilation)        LoadScriptList();
+            //else if(action == ActionMode.Compilation)   LoadCompiledScriptsList();
+
+                if (scriptsPanel.Height == scriptsPanel.MinimumHeight) {
                 scriptsPanel.ExpandAndCollapse();
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            bool containsMod = modDependencyList.ContainsKey(SelectedMod.Name);
-            Console.WriteLine(containsMod);
-        }
-
-        private void LoadFunctionList() {
-            functionList.Items.Clear();
-
-            //extendedTabControl1.Visible = true;
-            sideBarRight.Visible = true;
-
-            string currentScript =
-                $"{localMoPath}\\{projectList.GetItemText(projectList.SelectedItem)}\\scripts\\source\\{scriptList.GetItemText(scriptList.SelectedItem)}";
-
-
-            const int IMAGELIST_FUNCTION = 0;
-            const int IMAGELIST_FRAGMENT = 1;
-            const int IMAGELIST_EVENT    = 2;
-
-            ScriptInfo script = new ScriptInfo(currentScript);
-            SelectedScript = script;
-
-            if(script.Extends != null)
+        private void ShowScriptInfo(ScriptInfo script) {
+            if (script.Extends != null)
                 scriptnameLabel.Text = $"{script.Name.Replace(".psc", "")} : {script.Extends}";
             else {
                 scriptnameLabel.Text = $"{script.Name.Replace(".psc", "")}";
             }
 
-            //foreach(var callable in script.Callables) {
-            //    switch(callable.Type) {
-            //        case CallableType.Function:
-            //            // Parse functions
-            //        break;
-            //        case CallableType.Fragment:
-            //            // Parse fragment functions
-            //        break;
-            //        case CallableType.Event:
-            //            // Parse events
-            //        break;
-            //    }
-            //}
+            scriptnameLabel.Text += $" ({script.LinesOfCode} LOC)";
+        }
 
+        private void ShowScriptStates(ScriptInfo script) {
             stateList.Items.Clear();
-            foreach(var state in script.States) {
+            foreach (var state in script.States) {
                 ListViewItem lvi = new ListViewItem(state, 0) {
                     StateImageIndex = 0,
                     ForeColor = Color.White
                 };
                 stateList.Items.Add(lvi);
             }
-            foreach(var import in script.Imports) {
-                ListViewItem lvi = new ListViewItem(import);
-                lvi.StateImageIndex = 1;
-                lvi.ForeColor = Color.White;
-                stateList.Items.Add(lvi);
-            }
+        }
 
-            //foreach(var state in PapyrusState.GetScriptStates(script)) {
-            //    int start = state.GetLineBegin();
-            //    int end   = state.GetLineEnd();
-
-            //}
-
-            foreach(var function in script.Functions) {
-                functionList.Items.AddFunction(function);
-            }
-            foreach(var ev in script.Events) {
-                functionList.Items.AddEvent(ev);
-            }
-            tabPage4.Controls.Clear();
-            foreach(var prop in script.Properties) {
-                List<ExtendedLabel> lbls = new List<ExtendedLabel>();
-                ExtendedLabel lbl = new ExtendedLabel() {
-                    BackColor = extendedLabel5.BackColor,
-                    Image = extendedLabel5.Image,
-                    ForeColor = extendedLabel5.ForeColor,
-                    TextAlign = extendedLabel5.TextAlign,
-                    AutoSize = extendedLabel5.AutoSize,
-                    Font = extendedLabel5.Font,
-                    ImageAlign = extendedLabel5.ImageAlign,
-                    Size = extendedLabel5.Size,
-                    Dock = DockStyle.Top
-                };
-                lbl.Text = prop.Data;
-                lbls.Add(lbl);
-                foreach(ExtendedLabel el in lbls) {
-                    tabPage4.Controls.Add(el);
+        private void ShowScriptImports(ScriptInfo script) {
+            if (script.Imports.Length != 0) {
+                foreach (var import in script.Imports) {
+                    ListViewItem lvi = new ListViewItem(import, 1);
+                    lvi.StateImageIndex = 1;
+                    lvi.ForeColor = Color.White;
+                    stateList.Items.Add(lvi);
                 }
             }
-
-            bool shouldDisplayFunctionList = false;
-
-            var functionCount = script.Functions.Length;
-            var eventCount    = script.Events.Length;
-            var fragmentCount = script.Fragments.Length;
-
-            if(functionCount > 0) {
-                functionListCountPanel.Visible = true;
-                functionCountLabel.Text = $"{functionCount} {(functionCount == 1 ? "Function" : "Functions")}";
-                shouldDisplayFunctionList = true;
-                functionListSeparator.Visible = true;
-            }
-            else {
-                functionListCountPanel.Visible = false;
-                functionListSeparator.Visible = false;
-            }
-
-            if(eventCount > 0) {
-                eventListCountPanel.Visible = true;
-                eventCountLabel.Text = $"{eventCount} {(eventCount == 1 ? "Event" : "Events")}";
-                shouldDisplayFunctionList = true;
-            }
-            else {
-                eventListCountPanel.Visible = false;
-            }
-
-            if(fragmentCount > 0) {
-                fragmentListCountPanel.Visible = true;
-                fragmentCountLabel.Text = $"{fragmentCount} {(fragmentCount == 1 ? "Fragment" : "Fragments")}";
-                functionListSeparator2.Visible = true;
-            }
-            else {
-                fragmentListCountPanel.Visible = false;
-                functionListSeparator2.Visible = false;
-            }
-
-            if(shouldDisplayFunctionList) {
-                functionListStatusPanel.Visible = true;
-            }
-            else {
-                functionListStatusPanel.Visible = false;
-            }
-
-            if(script.HasFunctions || script.HasEvents) {
-                sideBarRight.Visible = true;
-            }
-            else {
-                sideBarRight.Visible = false;
-            }
-
-            //mainTabControl.Width = Width - 218 - (sideBarRight.Visible ? sideBarRight.Width : 0);
         }
+
+        private void ShowScriptFunctions(ScriptInfo script) {
+            functionList.AddFunctions(script.Functions);
+        }
+
+        private void ShowScriptFragments(ScriptInfo script) {
+            functionList.AddFragments(script.Fragments);
+        }
+
+        private void ShowScriptEvents(ScriptInfo script) {
+            functionList.AddEvents(script.Events);
+        }
+
+        private void ShowScriptProperties(ScriptInfo script) {
+            propertyList.Add(script.Properties);
+        }
+
+        /// <summary>
+        /// Stores the previous script when selecting a new one
+        /// </summary>
+        private string _oldScriptName = null;
 
         private void ScriptList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadFunctionList();
+            if (scriptList.SelectedItem == null || scriptList.GetItemText(scriptList.SelectedItem) == _oldScriptName)
+                return;
 
-            ScriptInfo si = new ScriptInfo($"{localMoPath}\\{projectList.GetItemText(projectList.SelectedItem)}\\scripts\\source\\{scriptList.GetItemText(scriptList.SelectedItem)}");
-            using (StreamReader r = new StreamReader(si.Path)) {
-                //fastColoredTextBox1.Text = r.ReadToEnd();
+            functionList.Clear();
+            propertyList.Clear();
+
+            scriptsFromModCount.Text = $"{scriptList.Items.Count} Scripts ({scriptList.SelectedItems.Count} selected)";
+
+            ScriptInfo script = null;
+
+            if(action == ActionMode.Compilation) {
+                script = new ScriptInfo($"{localMoPath}\\{projectList.GetItemText(projectList.SelectedItem)}\\scripts\\source\\{scriptList.GetItemText(scriptList.SelectedItem)}");
             }
-            locCount.Text = $"{si.LinesOfCode} LOC";
-            //scintilla1.Text = "";
-            //foreach(string line in si.Data) {
-            //    scintilla1.Text += line + "\n";
-            //}
+            else if(action == ActionMode.Decompilation) {
+                script = new ScriptInfo($"{localMoPath}\\{projectList.GetItemText(projectList.SelectedItem)}\\scripts\\{scriptList.GetItemText(scriptList.SelectedItem)}");
+            }
+
+            if(script == null)
+                return;
+
+            _oldScriptName = SelectedScript.Name;
+
+            ShowScriptInfo(script);
+
+            if(script.HasStates)     ShowScriptStates(script);
+            if(script.HasImports)    ShowScriptImports(script);
+            if(script.HasFunctions)  ShowScriptFunctions(script);
+            if(script.HasFragments)  ShowScriptFragments(script);
+            if(script.HasEvents)     ShowScriptEvents(script);
+            if(script.HasProperties) ShowScriptProperties(script);
+            
+            sideBarRight.Visible = script.HasFunctions || script.HasFragments || script.HasEvents;
+
+
+
+            if (sideBarRight.Visible) {
+                //this.Width = 800;
+                this.canBeMaximized = true;
+                sideBar.Width = this.Width / 2;
+            }
+
+            
+            if(action == ActionMode.Compilation)         SetupBuildScriptPanel();
+            else if (action == ActionMode.Decompilation) SetupDecompileScriptPanel();
+
+            statusBarLabel.Text = "Ready";
+
+            UpdateControlLocation(modsInstalledCount);
+            UpdateControlLocation(scriptsFromModCount);
         }
-
-        private void PropertiesToolStripMenuItem_Click(object sender, EventArgs e) {
-            properties.Show();
-        }
-
-
-        [System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = true)]
-        static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
 
         private void BuildScriptMenuItem_Click(object sender, EventArgs e) {
             StartCompilation();
         }
 
         private void ClearBuildLogMenuItem_Click(object sender, EventArgs e) {
-            // outputListBox.Items.Clear();
             Console.Clear();
             Console.WriteLine(PapyrusCompiler.StdErr);
         }
@@ -838,39 +762,43 @@ namespace PapyrusUI
         }
 
         private void ScriptList_DoubleClick(object sender, EventArgs e) {
-            string selectedScript = scriptList.GetItemText(scriptList.SelectedItem);
+            //string selectedScript = scriptList.GetItemText(scriptList.SelectedItem);
             //if(scriptList.SelectedItem != null && !mainTabControl.TabPages.ContainsKey(selectedScript)) {
             //    mainTabControl.TabPages.Add(selectedScript);
             //}
-        }
-
-        private void ErrorListTextbox_TextChanged(object sender, EventArgs e) {
-            if(errorList.Items.Contains(errorListTextbox.Text)) {
-                errorList.Items.Clear();
-                var result = PapyrusCompiler.StdErr.Split(new[] { '\n' });
-                foreach (string line in result) {
-                    try {
-                        if (line != string.Empty && line != " ") {
-                            Console.WriteLine($"{line.Substring(line.LastIndexOf("\\") + 1)}");
-                            string currentMod = projectList.GetItemText(projectList.SelectedItem);
-                            textBox1.Text = PapyrusCompiler.StdOut;
-                            string itemToAdd = $"{line.Substring(line.LastIndexOf("\\") + 1)}";
-                            if (itemToAdd.Contains("unable to locate script")) {
-                                itemToAdd += " (missing dependency)";
-                            }
-
-                            errorList.Items.Add(itemToAdd);
-                            errorCountLabel.Text = $"{errorList.Items.Count.ToString()} Errors";
-                        }
-                    }
-                    catch (Exception ex) {
-                        Console.WriteLine(ex.Message);
-                        throw;
-                    }
-
-                }
+            if(action == ActionMode.Compilation) {
+                ScriptViewer sv = new ScriptViewer();
+                sv.ViewScript(SelectedScript);
             }
         }
+
+        //private void ErrorListTextbox_TextChanged(object sender, EventArgs e) {
+        //    if(errorList.Items.Contains(errorListTextbox.Text)) {
+        //        errorList.Items.Clear();
+        //        var result = PapyrusCompiler.StdErr.Split(new[] { '\n' });
+        //        foreach (string line in result) {
+        //            try {
+        //                if (line != string.Empty && line != " ") {
+        //                    Console.WriteLine($"{line.Substring(line.LastIndexOf("\\") + 1)}");
+        //                    string currentMod = projectList.GetItemText(projectList.SelectedItem);
+        //                    textBox1.Text = PapyrusCompiler.StdOut;
+        //                    string itemToAdd = $"{line.Substring(line.LastIndexOf("\\") + 1)}";
+        //                    if (itemToAdd.Contains("unable to locate script")) {
+        //                        itemToAdd += " (missing dependency)";
+        //                    }
+
+        //                    errorList.Items.Add(itemToAdd);
+        //                    errorCountLabel.Text = $"{errorList.Items.Count.ToString()} Errors";
+        //                }
+        //            }
+        //            catch (Exception ex) {
+        //                Console.WriteLine(ex.Message);
+        //                throw;
+        //            }
+
+        //        }
+        //    }
+        //}
 
         private void BottomSplitter_SplitterMoved(object sender, SplitterEventArgs e) {
             const int padding = 20;
@@ -880,14 +808,8 @@ namespace PapyrusUI
             scriptsPanel.MaximumHeight = Height - padding - (Height - bottomSplitter.Location.Y);
         }
 
-        private void SaveToolStripMenuItem_Click(object sender, EventArgs e) {
-            string currentScript =
-                $"{localMoPath}\\{projectList.GetItemText(projectList.SelectedItem)}\\scripts\\source\\{scriptList.GetItemText(scriptList.SelectedItem)}";
-
-            //fastColoredTextBox1.SaveToFile(currentScript, Encoding.UTF8);
-        }
-
-        private void HeaderPanel1_Click(object sender, EventArgs e) {
+        private void HeaderPanel1_Click(object sender, EventArgs
+            e) {
             //headerPanel1.ExpandAndCollapse();
         }
 
@@ -896,24 +818,114 @@ namespace PapyrusUI
             foreach(ModInfo mod in mods) {
                 try {
                     if(mod.HasSourceScripts) {
-                        Console.WriteLine(mod.Name);
-                        PapyrusCompiler.Arguments.AddPath($"{localMoPath}\\{mod.Name}\\scripts\\source");
-
+                        //PapyrusCompiler.Arguments.AddPath($"{localMoPath}\\{mod.Name}\\scripts\\source");
                     }
                 }
                 catch (DirectoryNotFoundException ex) {
                     Console.WriteLine(ex.Message);
                 }
             }
-
-            Console.WriteLine();
-            PapyrusCompiler.Arguments.Parse();
         }
 
-        private void NewProjectToolStripMenuItem_Click(object sender, EventArgs e) {
-            AddScriptForm addScript = new AddScriptForm();
-            addScript.Show();
+        private void SplitterMiddle_SplitterMoved(object sender, SplitterEventArgs e) {
+            UpdateControlLocation(modsInstalledCount);
+            UpdateControlLocation(scriptsFromModCount);
+
+            if(action == ActionMode.Compilation)
+                UpdateControlLocation(buildScriptBtn);
+
+            if(action == ActionMode.Decompilation)
+                UpdateControlLocation(decompileScriptBtn);
         }
+
+        /// <summary>
+        /// Updates the specified control, should be used when a resize/resizing event occurs
+        /// to keep the controls centered if the control specified depends on the control said event is modifying.
+        /// </summary>
+        /// <param name="c">the control to have its location updated</param>
+        private void UpdateControlLocation(Control c) {
+            if(c == modsInstalledCount) {
+                // Center the mod count label based on the width of its container
+                Point modsCountOldLoc = modsInstalledCount.Location;
+                modsInstalledCount.Location = new Point((panel4.Width / 2) - (modsInstalledCount.Width / 2), modsCountOldLoc.Y);
+                return;
+            }
+            if(c == scriptsFromModCount) {
+                // Center the script count label based on the width of its container
+                Point scriptCountOldLoc = scriptsFromModCount.Location;
+                scriptsFromModCount.Location = new Point((panel6.Width / 2) - (scriptsFromModCount.Width / 2), scriptCountOldLoc.Y);
+                return;
+            }
+            if (c == buildScriptBtn) {
+                Point buildScriptBtnOldLoc = buildScriptBtn.Location;
+                buildScriptBtn.Location = new Point((buildScriptPanel.Width / 2) - (buildScriptBtn.Width / 2), buildScriptBtnOldLoc.Y);
+                return;
+            }
+            if(c == decompileScriptBtn) {
+                Point decompileScriptBtnOldLoc = decompileScriptBtn.Location;
+                decompileScriptBtn.Location = new Point((decompileScriptPanel.Width / 2) - (decompileScriptBtn.Width / 2), decompileScriptBtnOldLoc.Y);
+                return;
+            }
+        }
+
+        private void SplitterMiddle_SplitterMoving(object sender, SplitterEventArgs e) {
+            Console.WriteLine($"Splitter location: {splitterMiddle.Location}");
+        }
+
+
+        private void SetupBuildScriptPanel() {
+            buildScriptPanel.Visible = true;
+            decompileScriptPanel.Visible = false;
+            UpdateControlLocation(buildScriptBtn);
+            UpdateControlLocation(decompileScriptBtn);
+        }
+
+        private void SetupDecompileScriptPanel() {
+            decompileScriptPanel.Visible = true;
+            buildScriptPanel.Visible = false;
+            UpdateControlLocation(decompileScriptBtn);
+            UpdateControlLocation(buildScriptBtn);
+        }
+
+        private void BuildScriptBtn_Click(object sender, EventArgs e) {
+            StartCompilation();
+        }
+
+        private void DecompileScriptBtn_Click(object sender, EventArgs e) {
+            StartDecompilation();
+        }
+
+        private void SwapToDecompileImage_Click(object sender, EventArgs e) {
+            action = ActionMode.Decompilation;
+            LoadCompiledScriptsList();
+            SetupDecompileScriptPanel();
+        }
+
+        private void SwapToBuildImage_Click(object sender, EventArgs e) {
+            action = ActionMode.Compilation;
+            LoadScriptList();
+            SetupBuildScriptPanel();
+        }
+
+        private void MainUI_KeyPress(object sender, KeyPressEventArgs e) {
+            if (e.KeyChar == 'd') Console.WriteLine(SelectedScript.Path);
+            if (e.KeyChar == 'm') Console.WriteLine(SelectedMod.Name);
+        }
+
+        private void FunctionList_FunctionAdded(PapyrusFunction function) {
+            Console.WriteLine($"Function added: {function.Name}");
+        }
+
+        private void CfgCompilerMenuItem_Click(object sender, EventArgs e) {
+            ConfigCompilerForm compilerCfg = new ConfigCompilerForm();
+            compilerCfg.ShowDialog();
+        }
+
+        private void MainUI_Resize(object sender, EventArgs e) {
+            Invalidate();
+        }
+
+
 
         //private void LoadModPaths() {
         //    string[] paths = new string[] {
@@ -960,32 +972,39 @@ namespace PapyrusUI
         /// <param name="mod"></param>
         public static void AddMod(this ListBox.ObjectCollection collection, ModInfo mod) => collection.Add(mod.Name);
 
-        public static void AddFunction(this ListView.ListViewItemCollection lvic, PapyrusFunction function) {
-            const int IMAGELIST_FUNCTION = 0;
-            const int IMAGELIST_FRAGMENT = 1;
+        private delegate void SetPropertyThreadSafeDelegate<TResult>(
+    Control @this,
+    Expression<Func<TResult>> property,
+    TResult value);
 
-            var returnType    = PapyrusFunction.GetReturnType(function.Data);
-            var displayedName = PapyrusFunction.IsProcedure(function.Data) ?
-                                function.Name : $"{returnType} {function.Name}";
+        public static void SetPropertyThreadSafe<TResult>(
+            this Control @this,
+            Expression<Func<TResult>> property,
+            TResult value) {
+            var propertyInfo = (property.Body as MemberExpression).Member
+                as PropertyInfo;
 
-            ListViewItem lvi = new ListViewItem(displayedName);
-            lvi.StateImageIndex = IMAGELIST_FUNCTION;
-            lvi.ForeColor       = Color.White;
-
-            if(function.IsFragment()) {
-                lvi.StateImageIndex = IMAGELIST_FRAGMENT;
+            if (propertyInfo == null ||
+                !@this.GetType().IsSubclassOf(propertyInfo.ReflectedType) ||
+                @this.GetType().GetProperty(
+                    propertyInfo.Name,
+                    propertyInfo.PropertyType) == null) {
+                throw new ArgumentException("The lambda expression 'property' must reference a valid property on this Control.");
             }
 
-            lvic.Add(lvi);
-        }
-
-        public static void AddEvent(this ListView.ListViewItemCollection lvic, PapyrusEvent ev) {
-            const int IMAGELIST_EVENT = 2;
-
-            ListViewItem lvi = new ListViewItem(ev.Name);
-            lvi.StateImageIndex = IMAGELIST_EVENT;
-            lvi.ForeColor = Color.White;
-            lvic.Add(lvi);
+            if (@this.InvokeRequired) {
+                @this.Invoke(new SetPropertyThreadSafeDelegate<TResult>
+                (SetPropertyThreadSafe),
+                new object[] { @this, property, value });
+            }
+            else {
+                @this.GetType().InvokeMember(
+                    propertyInfo.Name,
+                    BindingFlags.SetProperty,
+                    null,
+                    @this,
+                    new object[] { value });
+            }
         }
 
     }

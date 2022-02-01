@@ -16,12 +16,16 @@ namespace PapyrusLibrary.Script
 
         public int LinesOfCode { get; private set; }
 
+        private Dictionary<PapyrusFunction, int[]> _functionInfo = new Dictionary<PapyrusFunction, int[]>();
+
         public ScriptInfo(string scriptPath)
         {
             file = new FileInfo(scriptPath);
             Path = scriptPath;
             RefreshScript();
         }
+
+
 
         private Dictionary<string, PapyrusFunction> functions = new Dictionary<string, PapyrusFunction>();
         private Dictionary<string, PapyrusEvent> events = new Dictionary<string, PapyrusEvent>();
@@ -73,12 +77,9 @@ namespace PapyrusLibrary.Script
             
         }
 
-        public bool IsValid
-        {
-            get {
-                return file.Extension == ".psc";
-            }
-        }
+        public bool IsValidSource => file.Extension == ".psc";
+
+        public bool IsValid => file.Extension == ".pex";
 
         /// <summary>
         /// Gets whether or not this script inherits from another script
@@ -133,35 +134,18 @@ namespace PapyrusLibrary.Script
             }
         }
 
-        //public ScriptInfo[] Imports
-        //{
-        //    get {
-        //        List<ScriptInfo> importScripts = new List<ScriptInfo>();
-        //        using (StreamReader reader = new StreamReader(file.FullName)) {
-        //            while(!reader.EndOfStream) {
-        //                string line = reader.ReadLine();
-        //                if(line.Contains("import")) {
-        //                    // Get the actual dependency script name and add it
-        //                    string script = line.Remove(0, line.IndexOf("imports"));
-        //                    importScripts.Add(new ScriptInfo(script));
-        //                }
-        //            }
-        //            return importScripts.ToArray();
-        //        }
-        //    }
-        //}
-
         public string[] Imports {
             get {
                 List<string> importedScripts = new List<string>();
                 foreach(string line in scriptRawData) {
                     try {
                         if (string.Equals(line.Substring(0, line.IndexOf(' ')), "Import", StringComparison.OrdinalIgnoreCase)) {
-                            importedScripts.Add(line.Replace("import", ""));
+                            importedScripts.Add(line.Replace("import", "").Replace("Import", ""));
+                            Console.WriteLine(line.Replace("import", "").Replace("Import", ""));
                         }
                     }
                     catch (Exception ex) {
-                        Console.WriteLine(ex.Message);
+                        //Console.WriteLine(ex.Message);
                     }
                 }
                 return importedScripts.ToArray();
@@ -178,6 +162,7 @@ namespace PapyrusLibrary.Script
                 foreach (string line in scriptRawData) {
                     if (PapyrusFunction.IsValidFunction(line)) {
                         functions.Add(new PapyrusFunction(line));
+                        //_functionInfo.Add(new PapyrusFunction(line), new int[]{ 4, 12 });
                     }
                 }
                 return functions.ToArray();
@@ -202,7 +187,7 @@ namespace PapyrusLibrary.Script
         /// <summary>
         /// Gets all the properties in a script
         /// </summary>
-        public PapyrusVariable[] Properties => PapyrusVariable.GetPropertiesFromScript(this);
+        public PapyrusVariable[] Properties => PapyrusVariable.GetProperties(this);
 
         /// <summary>
         /// Gets all the events in a script
@@ -215,9 +200,29 @@ namespace PapyrusLibrary.Script
         public bool HasFunctions => Functions.Length != 0;
 
         /// <summary>
+        /// Checks whether or not this script has fragment functions
+        /// </summary>
+        public bool HasFragments => Fragments.Length != 0;
+
+        /// <summary>
         /// Checks whether or not this script has events
         /// </summary>
         public bool HasEvents => Events.Length != 0;
+
+        /// <summary>
+        /// Checks whether or not this script has states
+        /// </summary>
+        public bool HasStates => States.Length != 0;
+
+        /// <summary>
+        /// Checks whether or not this script has functions
+        /// </summary>
+        public bool HasProperties => Properties.Length != 0;
+
+        /// <summary>
+        /// Checks whether or not this script imports external scripts
+        /// </summary>
+        public bool HasImports => Imports.Length != 0;
 
         public string[] States {
             get {

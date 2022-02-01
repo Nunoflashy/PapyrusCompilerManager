@@ -10,7 +10,7 @@ namespace PapyrusLibrary.Script {
         public PapyrusVariable(string property) {
             Data = property;
         }
-        public static PapyrusVariable[] GetPropertiesFromScript(ScriptInfo script) {
+        public static PapyrusVariable[] GetProperties(ScriptInfo script) {
             List<PapyrusVariable> properties = new List<PapyrusVariable>();
             foreach(string line in script.Data) {
                 if(line.Contains("Property ")) {

@@ -46,9 +46,9 @@ namespace ModUtilsLib
         private string ScriptsPath       => GetDirectory(ModDirectoryType.Scripts).FullName;
         private string SKSEPath          => GetDirectory(ModDirectoryType.SKSE).FullName;
 
-        public bool HasSourceScripts => GetDirectory(ModDirectoryType.SourceScripts).GetFiles() != null;
-        public bool HasScripts       => GetDirectory(ModDirectoryType.Scripts).GetFiles() != null;
-        public bool HasTextures      => GetDirectory(ModDirectoryType.Textures).GetFiles() != null;
+        public bool HasSourceScripts => GetDirectory(ModDirectoryType.SourceScripts).GetFiles().Length > 0;
+        public bool HasScripts       => GetDirectory(ModDirectoryType.Scripts).GetFiles().Length > 0;
+        public bool HasTextures      => GetDirectory(ModDirectoryType.Textures).GetFiles().Length > 0;
 
         private DirectoryInfo GetDirectory(ModDirectoryType directoryType)
         {
@@ -85,12 +85,25 @@ namespace ModUtilsLib
                     // Get the path to the script and create a new instance from it
                     ScriptInfo script = new ScriptInfo(scripts[i].FullName);
 
-                    if(script.IsValid){
+                    if(script.IsValidSource){
                         sourceScriptsInMod.Add(script);
                     }
                 }
 
                 return sourceScriptsInMod.ToArray();
+            }
+        }
+
+        public ScriptInfo[] Scripts {
+            get {
+                List<ScriptInfo> scriptsInMod = new List<ScriptInfo>();
+                FileInfo[] scriptFiles = GetDirectory(ModDirectoryType.Scripts).GetFiles();
+                foreach(var file in scriptFiles) {
+                    ScriptInfo script = new ScriptInfo(file.FullName);
+                    if(script.IsValid)
+                        scriptsInMod.Add(script);
+                }
+                return scriptsInMod.ToArray();
             }
         }
 
