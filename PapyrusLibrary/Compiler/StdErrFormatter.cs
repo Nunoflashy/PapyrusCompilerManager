@@ -11,7 +11,7 @@ namespace PapyrusLibrary.Compiler {
      * ScriptName(Line, Column): ErrorMessage
      * TempleBlessing.psc(4, 32): mismatched input 'Property' expecting FUNCTION
      */
-    //test
+
     /// <summary>
     /// Wrapper class to handle standard error from the compiler
     /// </summary>
